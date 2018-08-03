@@ -1,10 +1,15 @@
-const Schema = require('mongoose').Schema
+const mongoose = require('mongoose');
+const Schema = mongoose.Schema
 
 
 const programSchema = new Schema({
   typee: {
     type: String,
     enum: ['curso', 'diplomado']
+  },
+  school: {
+    type: String,
+    enum: ['ITAM', 'ITESM', 'IBERO']
   },
   name: String,
   initDate: Date,
@@ -13,7 +18,8 @@ const programSchema = new Schema({
   modules: Number,
   hours: Number,
   registrationCost: Number,
-  moduleCost: Number
+  moduleCost: Number,
+
 },{
   timestamps: {
     createdAt: 'created_at',
@@ -21,5 +27,5 @@ const programSchema = new Schema({
   }
 });
 
-
-module.exports = require('mongoose').model('Program', programSchema);
+const Program = mongoose.model("Program", programSchema);
+module.exports = Program;
