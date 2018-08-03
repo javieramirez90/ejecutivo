@@ -1,0 +1,8 @@
+ul li {
+  display: inline-block
+}
+
+ul li a {
+  padding: 30px;
+  text-decoration: none;
+}
