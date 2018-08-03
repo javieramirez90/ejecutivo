@@ -1,5 +1,6 @@
 require('dotenv').config();
 
+const cors = require('cors');
 const bodyParser   = require('body-parser');
 const cookieParser = require('cookie-parser');
 const express      = require('express');
@@ -8,6 +9,8 @@ const hbs          = require('hbs');
 const mongoose     = require('mongoose');
 const logger       = require('morgan');
 const path         = require('path');
+const session = require('express-session');
+const passport = require('./helpers/passport');
 
 
 mongoose.Promise = Promise;
@@ -24,8 +27,18 @@ const debug = require('debug')(`${app_name}:${path.basename(__filename).split('.
 
 const app = express();
 
+app.use(session({
+  secret: 'program',
+  resave: true,
+  saveUninitialized:true
+}));
+
+app.use(passport.initialize());
+app.use(passport.session());
+
 // Middleware Setup
 app.use(logger('dev'));
+app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
@@ -47,11 +60,15 @@ app.use(favicon(path.join(__dirname, 'public', 'images', 'favicon.ico')));
 
 
 // default value for title local
-app.locals.title = 'Express - Generated with IronGenerator';
+app.locals.title = 'ejecutivoMX';
 
 
 
 const index = require('./routes/index');
+const auth = require('./routes/auth');
+const userPro = require('./routes/user');
+app.use('/profile', userPro);
+app.use('/', auth);
 app.use('/', index);
 
 
